@@ -1,0 +1,171 @@
+lib/
+├── main.dart                      # Loyiha boshlanish nuqtasi
+├── models/                        # Ma’lumot modellar
+│   ├── skill_model.dart           # Skill modeli (ko‘nikmalar: nomi va darajasi)
+│   ├── project_model.dart         # Portfolio loyihalari uchun model
+│   ├── service_model.dart         # Xizmatlar (Services) uchun model
+│   ├── blog_model.dart            # Blog postlari uchun model
+│   ├── contact_model.dart         # Kontakt ma’lumotlari yoki forma uchun model
+├── viewmodels/                    # ViewModel’lar (state management)
+│   ├── home_viewmodel.dart        # HomePage uchun holatni boshqarish
+│   ├── about_viewmodel.dart       # AboutPage uchun holatni boshqarish
+│   ├── portfolio_viewmodel.dart   # PortfolioPage uchun holatni boshqarish
+│   ├── services_viewmodel.dart    # ServicesPage uchun holatni boshqarish
+│   ├── blog_viewmodel.dart        # BlogPage uchun holatni boshqarish
+│   ├── contact_viewmodel.dart     # ContactPage uchun holatni boshqarish
+├── pages/                         # Asosiy ekranlar (UI sahifalar)
+│   ├── home_page.dart             # Bosh sahifa
+│   ├── about_page.dart            # Haqida sahifasi
+│   ├── portfolio_page.dart        # Portfolio sahifasi
+│   ├── services_page.dart         # Xizmatlar sahifasi
+│   ├── blog_page.dart             # Blog sahifasi
+│   ├── contact_page.dart          # Kontakt sahifasi
+├── widgets/                       # Qayta ishlatiladigan UI komponentlar
+│   ├── section_title.dart         # Sarlavha komponenti
+│   ├── nav_item.dart              # Navigatsiya menyusi elementlari
+│   ├── social_button.dart         # Ijtimoiy tarmoqlar uchun tugmalar
+│   ├── skills_list.dart           # Ko‘nikmalar ro‘yxati
+│   ├── experience_card.dart       # Tajriba kartasi (masalan, AboutPage’da ishlatiladi)
+│   ├── contact_info.dart          # Kontakt ma’lumotlari komponenti
+│   ├── contact_form.dart          # Kontakt formasi komponenti
+├── providers/                     # State management uchun providerlar
+│   ├── team_provider.dart         # TeamPage uchun holatni boshqarish
+
+
+
+
+
+
+Loyiha Arxitekturasining Tahlili
+Loyihangiz MVVM (Model-View-ViewModel) arxitekturasiga asoslangan va Provider state management yondashuvi qo‘llanilgan. Quyida har bir qatlamni chuqurroq tahlil qilamiz:
+1. Model Qatlami (Data Layer)
+Maqsad: API’dan olingan ma’lumotlarni yoki foydalanuvchi kiritgan ma’lumotlarni Flutter obyektlariga aylantirish.
+Fayllar:
+skill_model.dart: Ko‘nikmalar (masalan, TeamPage da ishlatilgan Skill modeli).
+project_model.dart: Portfolio loyihalari (masalan, loyiha nomi, tavsifi, rasmi).
+service_model.dart: Xizmatlar (masalan, xizmat nomi, tavsifi).
+blog_model.dart: Blog postlari (masalan, sarlavha, matn, rasm).
+contact_model.dart: Kontakt ma’lumotlari yoki forma (masalan, ism, email, xabar).
+Tahlil:
+Modellar models/ jildida joylashgan va har biri o‘ziga xos ma’lumot tuzilishini ifodalaydi.
+TeamPage da ishlatilgan TeamMember va Skill modellarini avval team_provider.dart ichida saqlagan edik, lekin ularni models/ jildiga ko‘chirish to‘g‘ri qaror bo‘lgan, chunki bu modullikni oshiradi.
+2. ViewModel Qatlami (State Management Layer)
+Maqsad: Ma’lumotlarni boshqarish, biznes logikasini amalga oshirish va UI bilan ma’lumot oqimini ta’minlash.
+Fayllar:
+home_viewmodel.dart: HomePage uchun holatni boshqarish (masalan, bosh sahifadagi dinamik ma’lumotlar).
+about_viewmodel.dart: AboutPage uchun holatni boshqarish (masalan, tajriba yoki ko‘nikmalar ro‘yxati).
+portfolio_viewmodel.dart: PortfolioPage uchun holatni boshqarish (masalan, loyihalar ro‘yxati).
+services_viewmodel.dart: ServicesPage uchun holatni boshqarish (masalan, xizmatlar ro‘yxati).
+blog_viewmodel.dart: BlogPage uchun holatni boshqarish (masalan, blog postlari).
+contact_viewmodel.dart: ContactPage uchun holatni boshqarish (masalan, forma yuborish logikasi).
+team_provider.dart: TeamPage uchun holatni boshqarish (API’dan jamoa a’zolarini olish).
+Tahlil:
+Har bir sahifa uchun alohida ViewModel (Provider) yaratilgan, bu esa har bir sahifaning holatini mustaqil ravishda boshqarish imkonini beradi.
+TeamProvider misolida, API’dan ma’lumot olish, yuklanish holati (isLoading), xato holati (error), joriy indeks (currentIndex) va animatsiya holati (animationTriggered) boshqarilmoqda.
+ChangeNotifier yordamida holat o‘zgarishlari UI’ga bildiriladi.
+3. View Qatlami (UI Layer)
+Maqsad: Foydalanuvchi interfeysini qurish va ma’lumotlarni ko‘rsatish.
+Fayllar:
+home_page.dart: Bosh sahifa (ehtimol, umumiy ma’lumotlar, xizmatlar yoki portfolio qismlari).
+about_page.dart: Haqida sahifasi (tajriba, ko‘nikmalar, jamoa a’zolari).
+portfolio_page.dart: Portfolio sahifasi (loyiha kartalari).
+services_page.dart: Xizmatlar sahifasi (xizmatlar ro‘yxati).
+blog_page.dart: Blog sahifasi (blog postlari ro‘yxati).
+contact_page.dart: Kontakt sahifasi (kontakt ma’lumotlari va forma).
+Tahlil:
+Har bir sahifa alohida StatelessWidget sifatida tashkil qilingan va holatni boshqarish uchun Provider dan foydalanadi.
+TeamPage misolida, Consumer<TeamProvider> yordamida ma’lumotlar olinadi va CarouselSlider orqali jamoa a’zolari ko‘rsatiladi.
+Animatsiyalar (FadeTransition, AnimatedBuilder, TweenAnimationBuilder) _TeamCard ichida saqlanib qolgan.
+4. Widgets (Qayta Ishlatiladigan Komponentlar)
+Maqsad: Kodni qayta ishlatish va UI komponentlarini modulli qilish.
+Fayllar:
+section_title.dart: Sarlavha komponenti (barcha sahifalarda ishlatiladi).
+nav_item.dart: Navigatsiya menyusi elementlari (masalan, Home, About, Portfolio tugmalari).
+social_button.dart: Ijtimoiy tarmoqlar uchun tugmalar (masalan, LinkedIn, GitHub).
+skills_list.dart: Ko‘nikmalar ro‘yxati (ehtimol AboutPage yoki TeamPage da ishlatiladi).
+experience_card.dart: Tajriba kartasi (ehtimol AboutPage da ishlatiladi).
+contact_info.dart: Kontakt ma’lumotlari (ehtimol ContactPage da ishlatiladi).
+contact_form.dart: Kontakt formasi (ehtimol ContactPage da ishlatiladi).
+Tahlil:
+Widgetlar qayta ishlatiladigan shaklda tashkil qilingan, bu esa kodni qisqartiradi va bir xil dizaynni saqlashni osonlashtiradi.
+Masalan, section_title.dart barcha sahifalarda bir xil sarlavha dizaynini ta’minlaydi.
+5. Providers (State Management)
+Maqsad: Holatni boshqarish va ma’lumot oqimini ta’minlash.
+Fayllar:
+team_provider.dart: TeamPage uchun holatni boshqarish.
+Tahlil:
+Hozircha faqat team_provider.dart mavjud, lekin viewmodels/ jildidagi fayllar ham Provider yoki shunga o‘xshash yondashuvdan foydalanishi mumkin.
+viewmodels/ va providers/ jildlari o‘zaro mos keladi, lekin ularni birlashtirib, faqat providers/ jildida saqlash yanada tartibli bo‘lardi.
+
+Loyiha Arxitekturasining Umumiy Ko‘rinishi
+Loyihangiz MVVM (Model-View-ViewModel) arxitekturasiga asoslangan va quyidagi qatlamlardan iborat:
+Model (Data Layer):
+models/ jildidagi fayllar (Skill, TeamMember, Project, Service, Blog, Contact).
+API’dan ma’lumot olish (http paketi orqali).
+JSON ma’lumotlarni Dart obyektlariga aylantirish.
+ViewModel (State Management Layer):
+viewmodels/ va providers/ jildidagi fayllar (TeamProvider, HomeViewModel, AboutViewModel, va hokazo).
+Provider yordamida holatni boshqarish.
+API’dan ma’lumot olish, xato va yuklanish holatlarini boshqarish.
+View (UI Layer):
+pages/ jildidagi fayllar (HomePage, AboutPage, TeamPage, va hokazo).
+widgets/ jildidagi qayta ishlatiladigan komponentlar.
+Animatsiyalar va dinamik UI elementlari (CarouselSlider, progress barlar, hover effektlari).
+Ma’lumot Oqimi (Data Flow):
+
+
+
+
+
+
+
+
+
+
+[API] --> [ViewModel (TeamProvider)] --> [Model (TeamMember, Skill)]
+                          |
+                          v
+[View (TeamPage)] --> [Widgets (_TeamCard, SectionTitle)] --> [UI]
+
+
+            Arxitektura Diagramma:
+
++-----------------+
+|      API        |
++-----------------+
+         |
+         v
++-----------------+
+|  TeamProvider   | --> [fetchTeamMembers] --> [TeamMember, Skill]
+|  (ViewModel)    | --> [isLoading, error, teamMembers]
++-----------------+
+         |
+         v
++-----------------+
+|   TeamPage      | --> [Consumer<TeamProvider>]
+|   (View)        | --> [CarouselSlider]
++-----------------+
+         |
+         v
++-----------------+
+|   _TeamCard     | --> [FadeTransition, AnimatedBuilder, TweenAnimationBuilder]
+|   (Widget)      | --> [Hover Effects, Progress Bars]
++-----------------+
+         |
+         v
++-----------------+
+|      UI         | --> [Kartalar, Dots, Animatsiyalar]
++-----------------+
+
+
+
+Loyiha Arxitekturasining Afzalliklari
+Modullik:
+Har bir qatlam (Model, ViewModel, View) alohida jildlarda joylashgan.
+Widgetlar (widgets/) qayta ishlatiladigan shaklda.
+Holat Boshqaruvi:
+Provider yordamida holat boshqarilmoqda, bu esa kodni soddalashtiradi va sahifalar o‘rtasida ma’lumot almashishni osonlashtiradi.
+Dinamik Ma’lumotlar:
+API’dan ma’lumot olish tufayli ma’lumotlar dinamik.
+Animatsiyalar:
+Flutter’ning ichki animatsiya vositalari yordamida silliq va zamonaviy effektlar qo‘llanilgan.
